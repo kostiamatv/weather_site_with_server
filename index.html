@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My weather site</title>
+	<link rel="stylesheet" href="styles/style.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Exo+2&display=swap" rel="stylesheet"> 
+	<script type="text/javascript" src="js/script.js"></script>
+	<!-- <meta http-equiv="refresh" content="1"> -->
+</head>
+<body>
+	<main>
+		<div class="top_container">
+			<h1 class="local_weather">Погода здесь</h1>
+			<button class="update_location">
+				<p class="update_text">Обновить геолокацию</p>
+				<img class="update_icon" src="images/update_icon.png">
+			</button>
+		</div>
+		
+		<div class="current_location">
+			<h2 class="main_city_name">??????</h2>
+			<img alt="weather icon" class="weather_icon" src="images/tmp_icon.png">
+			<span class="temperature">???C</span>
+			<ul>
+				<li>
+					<h3>Ветер</h3>
+					<p class="wind">???????????</p>
+				</li>
+				<li>
+					<h3>Облачность</h3>
+					<p class="cloudiness">????????????</p>
+				</li>
+				<li>
+					<h3>Давление</h3>
+					<p class="pressure">????????</p>
+				</li>
+				<li>
+					<h3>Влажность</h3>
+					<p class="humidity">?????%</p>
+				</li>
+				<li>
+					<h3>Координаты</h4>
+					<p class="coords">??????</p>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="middle_container">
+			<h2 class="favorites">Избранное</h2>
+			<form class="add_city">
+				<input class="new_city" placeholder="Добавить новый город">
+				<button class="add_button">+</button>
+			</form>
+		</div>
+		
+		<ul class="favorite_cities">
+			<template class="favorite_city_template">
+				<li>
+					<div class="favorite_city">
+						<div class="favorite_city_header">
+							<h3 id="favorite_city_name">???</h3>
+							<span id="favorite_city_temperature">???°C</span>
+							<img alt="weather icon" id="weather_icon" src="images/tmp_icon.png">
+							<button class="remove_button">X</button>
+						</div>
+						<ul>
+							<li>
+								<h4>Ветер</h4>
+								<p id="wind">?????</p>
+							</li>
+							<li>
+								<h4>Облачность</h4>
+								<p id="cloudiness">?????</p>
+							</li>
+							<li>
+								<h4>Давление</h4>
+								<p id="pressure">?????</p>
+							</li>
+							<li>
+								<h4>Влажность</h4>
+								<p id="humidity">?????</p>
+							</li>
+							<li>
+								<h4>Координаты</h4>
+								<p id="coords">?????</p>
+
+							</li>
+						</ul>
+					</div>
+				</li>
+			</template>
+
+		</ul>
+	</main>
+</body>
+</html>

@@ -1,0 +1,437 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
+main{
+	/*background-color: lightgreen;*/
+	font-family: 'Exo 2', sans-serif;
+	margin: 0 15%;
+}
+
+h1{
+	color: #7c7c7c;
+	font-size: 50px;
+	margin: 0;
+}
+
+h2{
+	color: #7c7c7c;
+	font-size: 50px;
+	margin: 0;
+}
+
+.top_container{
+	align-content: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 20px 0;
+}
+
+.update_location{
+	background-color: #c9d2d7;
+	border-radius: 10px;
+	border-width: 0;
+	color: #718186;
+	height: 60px;
+	margin: 10px 0px 10px 50px;
+	width: 300px;
+}
+
+.update_icon{
+	display: none;
+}
+
+.update_text{
+	font-size: 25px;
+	margin: 0;
+}
+
+
+.current_location{
+	display: grid;
+	grid-template-areas: "header header data"
+						 "icon temp data";
+	grid-template-columns: 200px 250px 1fr;
+	margin: auto;
+	padding: 0;
+}
+
+.current_location h2{
+	color: #718186;
+	font-size: 55px;
+	grid-area: header;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	text-overflow: ellipsis;
+}
+
+.current_location span{
+	color: #7c7c7c;
+	font-size: 100px;
+	font-family: 'Exo 2', sans-serif;
+	grid-area: temp;
+	height: 200px;
+	text-align: center;
+}
+
+.current_location img{
+	grid-area: icon;
+	width: 200px;
+}
+
+.current_location ul{
+	list-style-type: none;
+	grid-area: data;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.current_location ul li{
+	align-content: center;
+	background-color: #a7afb1;
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0 10px 0;
+	padding: 5px;
+}
+
+.current_location ul li h3{
+	color: #eef9fd;
+	font-family: "Arial";
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.current_location ul li p{
+	color: #eef9fd;
+	font-family: "Arial";
+	font-size: 20px;
+	margin: auto 0 auto 0;
+	text-align: right;
+}
+
+.middle_container{
+	display: flex;
+	flex-direction: row wrap;
+	justify-content: space-between;
+	margin: 20px 0;
+	width: 100%;
+}
+
+.middle_container h2{
+	width: 300px;
+}
+
+.add_city{
+	width: 360px;
+}
+
+.add_city input{
+	background-color: #f1f1f1;	
+	border-width: 0;
+	font-size: 25px;
+	height: 50px;
+	padding: 0;
+	text-align: center;
+	width: 300px;
+}
+
+.add_city button{
+	background-color: #718186;
+	border-radius: 25px;
+	border-width: 0;
+	color: #eef9fd;
+	font-size: 25px;
+	height: 50px;
+	margin-left: 5px;
+	width: 50px;
+}
+
+.favorite_cities{
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.favorite_cities li{
+	list-style-type: none;
+}
+
+.favorite_city{
+	margin: auto;
+	padding: 0;
+	width: 500px;
+}
+
+.favorite_city_header{
+	display: flex;
+	flex-flow: row wrap;
+	height: 50px;
+	justify-content: space-between;
+
+}
+
+.favorite_city_header h3{
+	color: #718186;
+	font-size: 35px;
+	margin: 0;
+	overflow: hidden;
+	padding: auto;
+	text-overflow: ellipsis;
+	width: 280px;
+
+}
+
+.favorite_city_header span{
+	color: #7c7c7c;
+	font-size: 45px;
+	font-family: 'Exo 2', sans-serif;
+	text-align: center;
+	width: 120px;
+}
+
+.favorite_city_header img{
+	width: 50px;
+}
+
+.favorite_city_header button{
+	background-color: #718186;
+	border-radius: 25px;
+	border-width: 0;
+	color: #eef9fd;
+	font-size: 25px;
+	width: 50px;
+}
+
+.favorite_city ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.favorite_city ul li{
+	align-content: center;
+	background-color: #a7afb1;
+	display: flex;
+	justify-content: space-between;
+	margin: 10px 0 10px 0;
+	padding: 5px;
+}
+
+.favorite_city ul li h4{
+	color: #eef9fd;
+	font-family: "Arial";
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.favorite_city ul li p{
+	color: #eef9fd;
+	font-family: "Arial";
+	font-size: 20px;
+	margin: auto 0 auto 0;
+	text-align: right;
+}
+
+@media only screen and (max-width: 1450px){
+	main{
+		width: 90%;
+		margin: 0 5%;
+	}
+}
+
+
+
+@media only screen and (max-width: 1150px){
+	main{
+		width: 100%;
+		margin: 0 0;
+	}
+
+	.favorite_city{
+		margin: 0;
+		width: 350px;
+	}
+
+	.favorite_city_header{
+		flex-flow: row wrap;
+		width: 100%;
+	}
+
+	.favorite_cities{
+		margin: 0;
+		width: 100%;
+	}
+
+	.favorite_cities li{
+		margin: 0 10px;
+		width: 350px;
+	}
+
+	.favorite_city_header{
+		width: 350px;
+	}
+
+	.favorite_city ul li{
+		margin: none;
+		width: 340px;
+	}
+	
+	.favorite_city_header h3{
+		font-size: 25px;
+		margin: auto 0;
+		width: 40%;
+	}
+
+	.favorite_city_header span{
+		font-size: 25px;
+		margin: auto 0;
+		width: 20%;
+	}
+
+
+
+}
+
+@media only screen and (max-width: 768px){
+
+
+	.update_location{
+		border-radius: 25px;
+		height: 50px;
+		margin: 5px 0;
+		padding: 0;
+		width: 50px;
+	}
+
+	.update_icon{
+		display: block;
+		margin: auto;
+		width: 40px;
+	}
+
+	.update_text{
+		display: none;
+	}
+
+	.current_location{
+		display: grid;
+		grid-template-areas: "header header"
+							 "icon temp"
+							 "data data";
+		grid-template-columns: 1fr 1fr;					 
+		margin: auto;
+		padding: 0;
+	}
+
+	.current_location h3{
+		width: 500px;
+	}
+
+	.middle_container{
+		align-content: center;
+		flex-direction: column;
+		margin: 20px auto;
+		width: 500px;
+	}
+
+	.add_city{
+		display: flex;
+		margin: 10px 0 0 0;
+		width: 100%;
+	}
+
+	.add_city input{
+		width: 100%;
+	}
+
+	.favorite_cities {
+		justify-content: center;
+	}
+
+	main{
+		width: 100%;
+		margin: 0;
+	}
+
+	.top_container{
+		margin: 20px 0;
+		width: 100%;
+	}
+
+	.top_container h1{
+		font-size: 35px;
+	}
+
+	h2{
+		font-size: 30px;
+	}
+
+	.current_location h2{
+		font-size: 30px;
+	}
+
+	.current_location img{
+		height: 100px;
+		margin: auto;
+		width: 100px;
+	}
+
+	.current_location span{
+		font-size: 100px;
+	}
+
+	.middle_container{
+		margin: 0;
+		width: 100%;
+	}
+
+	.add_city input{
+		font-size: 20px;
+	}
+
+	.favorite_cities{
+		margin: 0;
+		width: 100%;
+	}
+
+	.favorite_cities li{
+		margin: 0;
+		width: 100%;
+	}
+
+	.favorite_city{
+		margin: 20px 0;
+		width: 100%;
+	}
+
+	.favorite_city ul li{
+		padding: 0;
+		width: 100%;
+	}
+
+	.favorite_city_header{
+		flex-flow: row wrap;
+		width: 100%;
+	}
+
+	.favorite_city_header h3{
+		font-size: 25px;
+		margin: auto 0;
+		width: 40%;
+	}
+
+	.favorite_city_header span{
+		font-size: 25px;
+		margin: auto 0;
+		width: 20%;
+	}
+
+}
