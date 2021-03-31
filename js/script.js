@@ -1,31 +1,25 @@
-const API_KEY = "c14ee76cfde0efbba2b3800719d0b7bc"
+const URL = "http://localhost:3000"
 const DEFAULT_COORDS = new Object()
 DEFAULT_COORDS.lat = 41.6459
 DEFAULT_COORDS.lon = -88.6217
 
-function loadCityDataByName(city, onSuccess){
-	var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-	return loadCityDataByUrl(url, onSuccess)
+function loadCityDataByName(city, onLoad){
+	var url = `${URL}/weather/city?q=${city}`
+	return loadCityDataByUrl(url, onLoad)
 }
 
-function loadCityDataById(cityId, onSuccess){
-	var url = `https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=${API_KEY}&units=metric`
-	return loadCityDataByUrl(url, onSuccess)
+
+function loadCityDataByCoords(latitude, longitude, onLoad){
+	var url = `${URL}/weather/coordinates?lat=${latitude}&lon=${longitude}`
+	return loadCityDataByUrl(url, onLoad)
 }
 
-function loadCityDataByCoords(latitude, longitude, onSuccess){
-	var url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
-	return loadCityDataByUrl(url, onSuccess)
-}
-
-function loadCityDataByUrl(url, onSuccess){
+function loadCityDataByUrl(url, onLoad){
 	var xhr = new XMLHttpRequest()
 	xhr.open('GET', url)
-	xhr.onload = function() {
-		onSuccess(JSON.parse(xhr.response), xhr.status)
-	}
+	xhr.onload = function(){onLoad(xhr.status, JSON.parse(xhr.response))}
 	xhr.onerror = function() {
-		onSuccess(null, 123)
+		onLoad(400, JSON.parse('{"message": "When using API an error occured."'))
 	}
 	xhr.send(null)
 }
@@ -52,12 +46,18 @@ function createFavoriteCity(list){
 }
 
 function fillFavoriteCity(weatherState, newFavoriteCity){
-	
-	let cityId = weatherState.id
-	newFavoriteCity.id = cityId
+
+	newFavoriteCity.name = weatherState.name
 	newFavoriteCity.getElementsByClassName("remove_button")[0].addEventListener("click", function(){
-		document.getElementsByClassName("favorite_cities")[0].removeChild(newFavoriteCity)
-		removeCityFromStorage(cityId)
+		removeCityFromStorage(newFavoriteCity.name, (status, response) => {
+			if(status != 200){
+				alert(response.message)
+				return
+			}
+			else{
+				document.getElementsByClassName("favorite_cities")[0].removeChild(newFavoriteCity)
+			}
+		})
 	})
 	newFavoriteCity.querySelector('#favorite_city_name').textContent = weatherState.name
 	newFavoriteCity.querySelector('#favorite_city_temperature').textContent = Math.round(weatherState.main.temp) + "°C"
@@ -68,6 +68,16 @@ function fillFavoriteCity(weatherState, newFavoriteCity){
 	newFavoriteCity.querySelector('#coords').textContent = `[${weatherState.coord.lat}, ${weatherState.coord.lon}]`
 	
 	newFavoriteCity.querySelector('#weather_icon').src = `https://openweathermap.org/img/wn/${weatherState.weather[0].icon}.png`
+}
+
+
+function fillFavoriteCities(cities){
+	for (var city of cities){
+		let newFavoriteCity = createFavoriteCity(document.getElementsByClassName("favorite_cities")[0])
+		loadCityDataByName(city.name, (status, cityResponse) => {
+			fillFavoriteCity(cityResponse, newFavoriteCity)
+		})
+	}
 }
 
 
@@ -87,27 +97,28 @@ function fillMainCity(weatherState){
 
 
 function getCitiesFromStorage(){
-	if (localStorage.favorite_cities === undefined || localStorage.favorite_cities === ""){
-		return []
+	var xhr = new XMLHttpRequest()
+	xhr.open('GET', `${URL}/favorites`)
+	xhr.onload = function() {
+		if (xhr.status == 200){
+			fillFavoriteCities(JSON.parse(xhr.response))
+		}
 	}
-	return JSON.parse(localStorage.favorite_cities)
+	xhr.send(null)
 }
 
-function saveCitiesToStorage(cities){
-	localStorage.setItem("favorite_cities", JSON.stringify(cities))
+function addCityToStorage(city, onLoad){
+	var xhr = new XMLHttpRequest()
+	xhr.open('POST', `${URL}/favorites?q=${city}`)
+	xhr.onload = function(){onLoad(xhr.status, JSON.parse(xhr.response))}
+	xhr.send(null)
 }
 
-function addCityToStorage(city){
-	cities = getCitiesFromStorage()
-	cities.push(city)
-	saveCitiesToStorage(cities)
-}
-
-function removeCityFromStorage(city){
-	cities = getCitiesFromStorage()
-	index = cities.indexOf(city)
-	cities.splice(index, 1)
-	saveCitiesToStorage(cities)
+function removeCityFromStorage(city, onLoad){
+	var xhr = new XMLHttpRequest()
+	xhr.open('DELETE', `${URL}/favorites?q=${city}`)
+	xhr.onload = function(){onLoad(xhr.status, JSON.parse(xhr.response))}
+	xhr.send(null)
 }
 
 function addCity(city){
@@ -115,19 +126,20 @@ function addCity(city){
 		return
 	}
 	var newFavoriteCity = createFavoriteCity(document.getElementsByClassName("favorite_cities")[0])
-	loadCityDataByName(city, (cityResponse, status) => {
+	addCityToStorage(city, (status, response) => {
 		if(status != 200){
 				document.getElementsByClassName("favorite_cities")[0].removeChild(newFavoriteCity)
-				alert("При обращении к API возникла ошибка, может быть такой город не существует.")
+				alert(response.message)
 				return
 			}
-		if (getCitiesFromStorage().includes(cityResponse.id)) {
-			document.getElementsByClassName("favorite_cities")[0].removeChild(newFavoriteCity)
-			alert(`${city} уже есть`)
-		} else {
+		loadCityDataByName(city, (loadStatus, cityResponse) => {
+			if (loadStatus != 200){
+				document.getElementsByClassName("favorite_cities")[0].removeChild(newFavoriteCity)
+				alert(cityResponse.message)
+				return
+			}
 			fillFavoriteCity(cityResponse, newFavoriteCity)
-			addCityToStorage(cityResponse.id)
-		}
+		})
 	})
 }
 
@@ -143,7 +155,7 @@ function resetMainCity(){
 	mainCity.querySelector('.coords').textContent = `[???????????, ???????????]`
 	mainCity.querySelector('.weather_icon').src = `./images/tmp_icon.png`
 
-	loadCityDataByName(cityName, cityResponse => {
+	loadCityDataByName(cityName, (status, cityResponse) => {
 		fillMainCity(cityResponse)
 	})
 }
@@ -153,12 +165,12 @@ function resetMainCity(){
 function updateLocation(){
 	navigator.geolocation.getCurrentPosition(
 		pos => {
-			loadCityDataByCoords(pos.coords.latitude, pos.coords.longitude, cityResponse => {
+			loadCityDataByCoords(pos.coords.latitude, pos.coords.longitude, (status, cityResponse) => {
 				fillMainCity(cityResponse)
 			})	
 		},
 		pos => {
-			loadCityDataByCoords(DEFAULT_COORDS.lat, DEFAULT_COORDS.lon, cityResponse => {
+			loadCityDataByCoords(DEFAULT_COORDS.lat, DEFAULT_COORDS.lon, (status, cityResponse) => {
 				fillMainCity(cityResponse)
 			})
 		}
@@ -183,18 +195,15 @@ window.onload = function(){
 	})
 	
 
-	let cities = getCitiesFromStorage()
-	for (var cityId of cities){
-
-		let newFavoriteCity = createFavoriteCity(document.getElementsByClassName("favorite_cities")[0])
-		loadCityDataById(cityId, cityResponse => {
-			fillFavoriteCity(cityResponse, newFavoriteCity)
-		})
-	}
+	getCitiesFromStorage()
+	
 }
 
 window.addEventListener('offline', function(){
-	alert("Соединение потеряно. Перезагрузите страницу")
+	alert("Connection lost. Please refresh the page.")
 	document.getElementsByClassName("add_button")[0].disabled = true
 	document.getElementsByClassName("update_location")[0].disabled = true
+	for (var removeButton of document.getElementsByClassName("remove_button")){
+		removeButton.disabled = true
+	}
 })

@@ -1,0 +1,17 @@
+{
+  "name": "weather_site_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kostiamatv",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-generator": "^4.16.1",
+    "mongodb": "^3.6.4",
+    "cors": "^2.8.5"
+  }
+}
